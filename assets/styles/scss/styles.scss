@@ -1,0 +1,492 @@
+@import 'variables';
+
+@mixin flexCenter {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@mixin flexJustify {
+	display: flex;
+	justify-content: space-between;
+}
+
+@mixin absoluteCenter {
+	left: 50%; top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+*, *::before, *::after {
+	box-sizing: border-box;
+	margin: 0;
+	font-family: "Barlow Semi Condensed", sans-serif;
+	font-weight: 600;
+	font-style: normal;
+}
+
+button {
+	cursor: pointer;
+	border: none;
+	outline: none;
+	background: none;
+	letter-spacing: 2px;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+.hidden {
+	display: none;
+}
+html {
+	overflow-x: hidden;
+}
+
+body {
+	background-image: linear-gradient(110deg, hsl(214, 47%, 23%) 70%, hsl(237, 49%, 15%));
+	color: #fff;
+	line-height: .8;
+	height: 100vh;
+	overflow-x: hidden !important;
+	h1 {
+		font-size: 2.5rem;
+	}
+	@media screen and (max-width: $break-mid) {
+		height: auto;
+	}
+}
+
+.overlay {
+	background: rgba(0,0,0,.7);
+	position: fixed;
+	inset: 0;
+	width: 100%; height: 100%;
+	z-index: 1;
+	visibility: hidden;
+	opacity: 0;
+	transition: .3s opacity ease;
+}
+
+.container {
+	width: 100%;
+	max-width: 930px;
+	margin-inline: auto;
+	margin-block: 1em;
+	padding-inline: 1em;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+	height: 100%;
+	gap: 1em;
+	@media screen and (max-width: $break-mid) {
+		height: auto;
+
+		display: block;
+	}
+}
+
+.main-header {
+	@include flexJustify;
+	align-items: center;
+	border: 4px solid hsl(217, 16%, 45%);
+	border-radius: 20px;
+	padding: 1em 2em;
+	width: 75%;
+	@media screen and (max-width: $break-mid) {
+		width: 100%;
+		padding: .5em 1em;
+		.rps-logo {
+			width: 80px;
+		}
+	}
+	#score {
+		background: #fff;
+		color: hsl(229, 64%, 46%);
+		@include flexCenter;
+		flex-direction: column;
+		gap: .5em;
+		width: 150px; height: 115px;
+		border-radius: 10px;
+		letter-spacing: 2px;
+		@media screen and (max-width: $break-mid) {
+			width: 78px;
+			height: 70px;
+			font-size: .7rem;
+		}
+		span {
+			display: block;
+			color: $darkText;
+			font-size: 3.5rem;
+			@media screen and (max-width: $break-mid) {
+				font-size: 2rem;
+			}
+		}
+	}
+}
+
+
+/////
+
+main {
+	min-height: 66vh;
+	@media screen and (max-width: $break-mid) {
+		margin-top: 5em;
+	}
+}
+
+.game-wrap {
+	position: relative;
+	width: 30em;
+	@media screen and (max-width: $break-mid) {
+		width: 20em;
+		margin: 0 auto;
+		min-height: 60vh;
+	}
+
+	@media screen and (max-width: $break-small) {
+		width: 100%;
+	}
+
+	//for a tie..
+	&:has(.choice.user-choice.computer-choice) {
+		.choice.user-choice.computer-choice {
+			left: 50%;
+			right: auto;
+			transform: translateX(-50%) scale(1.5);
+			animation: fadeIn 1s forwards;
+			&::before {
+				content: none;
+			}
+			&::after {
+				content: "";
+				background: rgba(0,0,0,.6);
+				position: absolute;
+				inset: 0;
+				height: 100%;width: 100%;
+				animation: none;
+				opacity: 1;
+				z-index: 1;
+				scale: 1;
+				transform: none;
+			}
+			@media screen and (max-width: $break-mid) {
+				transform: translateX(-50%) scale(1) !important;
+				&::after {
+					content: none;
+				}
+			}
+		}
+		.results-block.show-results {
+			animation-delay: .3s;
+		}
+	}
+}
+
+
+.choice {
+	aspect-ratio: 1/1;
+	width: 200px;
+	border-radius: 50%;
+	position: absolute;
+	background: transparent;
+	top: 0; left: 0;
+	@media screen and (max-width: $break-mid) {
+		width: 130px;
+	}
+
+	&::after {
+		//winning button pulsate animation
+		position: absolute;
+	    background: radial-gradient(circle, transparent 0% 32%, rgba(255, 255, 255, 0.5) 32% 50%, rgba(255, 255, 255, 0.3) 50% 70%, rgba(255, 255, 255, 0.1) 70% 90%, rgba(255, 255, 255, 0) 90% 100%);
+	    width: 200%;
+	    height: 200%;
+	    @include absoluteCenter;
+	    border-radius: 50%;
+	    z-index: -1;
+	    scale: .6;
+	    transform-origin: 0 0;
+	    opacity: 0;
+	    @keyframes pulsate {
+	    	0%, 100% {
+	    		scale: .6;
+	    	}
+	    	50% {
+	    		scale: 1.1;
+	    		opacity: 1;
+	    	}
+	    }
+	    animation: pulsate 2s cubic-bezier(0.68, -0.05, 0.265, .55) infinite 1.5s;
+	}
+	&.winning-button {
+		&::after {
+			content: "";
+		}
+	}
+	.button-center {
+		position: absolute;
+		background: #fff;
+		width: 80%; height: 80%;
+		@include absoluteCenter;
+		border-radius: 50%;
+		box-shadow: 0 5px #bec1d4 inset;
+	}
+
+	img {
+		width: 70px;
+		position: relative;
+		@media screen and (max-width: $break-mid) {
+			width: 40px;
+		}
+	}
+
+	.connector {
+		position: absolute;
+		background: #17223e;
+		height: 15px;
+		width: 100px;
+		top: 50%; left: 90%;
+		transform: translateY(-50%);
+		z-index: -1;
+		&--bottom {
+			transform: none;
+			rotate: 60deg;
+			top: 105%;
+			left: auto;
+			right: -10px;
+		}
+		@media screen and (max-width: $break-small) {
+			width: 100%;
+			left: 80%;
+			&--bottom {
+				right: auto;
+				left: 35%;
+			}
+		}
+
+	}
+
+
+	//buttons original positions
+	&--paper {
+		background: linear-gradient(to top, hsl(230, 89%, 62%) 50%,  hsl(230, 89%, 65%));
+	}
+	&--scissors {
+		background: linear-gradient(to top, hsl(39, 89%, 49%) 50%,  hsl(40, 84%, 53%));
+		left: auto;
+		right: 0;
+		.connector {
+			rotate: -60deg;
+			left: -10px;
+			transform: none;
+			top: 105%;
+			@media screen and (max-width: $break-small) {
+				left: -35%;
+			}
+		}
+	}
+	&--rock {
+		background: linear-gradient(to top, hsl(349, 71%, 52%) 50%,  hsl(349, 70%, 56%));
+		top: 230px;
+		left: 30%;
+		@media screen and (max-width: $break-mid) {
+			top: 145px;
+		}
+	}
+
+	//button locations after user and computer selections
+	&.user-choice, &.computer-choice {
+		top: 150px;
+		transform: translateX(0);
+		.connector {
+			display: none;
+		}
+	}
+
+	&.user-choice {
+		right: auto;
+		left: -45px;
+		transform: translateX(0) scale(1.5);
+		@keyframes userChoiceMoveLeft {
+			0% {
+				transform: translateX(0) scale(1.5);
+			}
+			80% {
+				transform: translateX(0) scale(1.5);
+			}
+			100% {
+				transform: translateX(-140px) scale(1.5);
+			}
+		}
+		animation: userChoiceMoveLeft .75s forwards linear .5s;
+
+		@media screen and (max-width: $break-mid) {
+			top: auto;
+			transform: none;
+			left: initial;
+			animation: none;
+		}
+	}
+
+	&.computer-choice {
+		right: -45px;
+		left: auto;
+		opacity: 0;
+		transform: translateX(0) scale(1.5);
+		@keyframes computerChoiceFadeInMoveRight {
+			0% {
+				transform: translateX(0) scale(1.5);
+				opacity: 0;
+			}
+			80% {
+				transform: translateX(0) scale(1.5);
+				opacity: 1;
+			}
+			100% {
+				transform: translateX(140px) scale(1.5);
+				opacity: 1;
+			}
+		}
+		animation: computerChoiceFadeInMoveRight .75s forwards linear .5s;
+
+		@media screen and (max-width: $break-mid) {
+			top: auto;
+			transform: none;
+			right: 0;
+			animation: .5s fadeIn ease forwards .5s;
+			left: auto;
+		}
+	}
+
+
+	&.user-choice::before, &.computer-choice::before {
+		content: "You Picked";
+		position: absolute;
+		z-index: 2;
+		top: -30%;
+		color: #fff;
+		text-transform: uppercase;
+		left: 50%;
+		width: 100%;
+		transform: translateX(-50%);
+		font-size: 1rem;
+		letter-spacing: 2px;
+		@media screen and (max-width: $break-mid) {
+			top: auto;
+			bottom: -30%;
+			width: 200%;
+		}
+	}
+	
+	&.computer-choice::before {
+		content: "The House Picked";
+	}
+}
+
+
+.game-wrap {
+	.results-block {
+		position: absolute;
+		top: 200px; left: 50%;
+		transform: translateX(-50%);
+		text-align: center;
+		opacity: 0;
+		visibility: hidden;
+
+		#result {
+			font-size: 3.5rem;
+		}
+
+		.play-again-btn {
+		    width: 100%;
+		    text-align: center;
+		    margin-top: 20px;
+		    padding: 10px 20px;
+		    background-color: #fff;
+		    color: $darkText;
+		    border-radius: 5px;
+		    transition: .3s color ease;
+		    &:hover, &:focus {
+		    	color: hsl(349, 70%, 56%);
+		    } 
+		}
+		&.show-results {
+			visibility: visible;
+			animation: fadeIn .5s forwards 1.25s;
+		}
+		@media screen and (max-width: $break-mid) {
+			width: 100%;
+			padding-top: 15em;
+			margin-bottom: 4em;
+			transform: none;
+			position: static;
+		}
+	}
+}
+
+
+
+
+
+
+
+.modal {
+	background: #fff;
+	position: fixed;
+	@include absoluteCenter;
+	z-index: 3;
+	color: #000;
+	padding: 2em 3em;
+	border-radius: 20px;
+	opacity: 0;
+	visibility: hidden;
+	transition: .3s opacity ease;
+	.module-header {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 4em;
+	}
+	@media screen and (max-width: $break-mid) {
+		width: 100%; height: 100%;
+		text-align: center;
+		border-radius: 0;
+		.module-header {
+			text-align:  center;
+			display: block;
+			margin-bottom: 10em;
+			.close-x {
+				position: fixed;
+				bottom: 4em;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+		}
+	}
+}
+
+.button-show-rules {
+	position: fixed;
+	display: inline-block;
+	bottom: 5%;
+	right: 5%;
+	color: #fff;
+	padding: 1em 1em;
+	border-radius: 10px;
+	width: 130px;
+	border: 1px solid #fff;
+	@media screen and (max-width: $break-mid) {
+		display: block;
+		position: static;
+		margin: 0 auto 4em;
+
+	}
+}

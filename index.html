@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+	
+	<title>Frontend Mentor | Rock, Paper, Scissors</title>
+	<link rel="stylesheet" type="text/css" href="assets/styles/css/styles.css">
+</head>
+<body id="body">
+	
+	<div class="overlay" id="overlay" onclick="closeModal()"></div>
+	<div class="modal" id="modal">
+		<header class="module-header">
+			<h1 class="uppercase">Rules</h1>
+			<button class="close-x" onclick="closeModal()">
+				<img src="assets/img/icon-close.svg" alt="close">
+			</button>
+		</header>
+		
+		<img src="assets/img/image-rules.svg" alt="Rules diagram">
+	</div>
+	<div class="container">
+		<header class="main-header">
+			<div class="rps-title">
+				<img src="assets/img/logo.svg" alt="Rock Paper Scissors" class="rps-logo">
+
+			</div>
+			<div id="score" class="uppercase">Score <span>0</span></div>
+		</header>
+
+
+		<main>
+			<div class="game-wrap">
+
+				<button class="choice choice--paper" id="paper" onclick="playGame('paper')" title="Paper">
+					<i class="button-center"></i>
+					<img src="assets/img/icon-paper.svg" alt="Paper">
+					<i class="connector"></i>
+					<i class="connector connector--bottom"></i>
+				</button>
+
+				<button class="choice choice--scissors" id="scissors" onclick="playGame('scissors')" title="Scissors">
+					<i class="button-center"></i>
+					<img src="assets/img/icon-scissors.svg" alt="Scissors">
+					<i class="connector"></i>
+				</button>
+
+				<button class="choice choice--rock" id="rock" onclick="playGame('rock')" title="Rock">
+					<i class="button-center"></i>
+					<img src="assets/img/icon-rock.svg" alt="Rock">
+				</button>
+
+
+				<div class="results-block" id="results-block">
+					<div id="result" class="uppercase"></div>
+					<button id="play-again-btn" onclick="resetGame()" class="play-again-btn | uppercase">Play Again</button>  
+				</div>
+			</div>
+		</main>
+
+
+			
+		<button class="button-show-rules | uppercase" onclick="openModal()">Rules</button>
+
+		
+	</div>
+
+
+	
+	<script type="text/javascript" src="assets/script.js"></script>
+</body>
+</html>
